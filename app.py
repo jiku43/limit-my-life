@@ -6,6 +6,12 @@ import os
 import random
 from PIL import Image
 
+# --- 日本時間への修正（ここを追加） ---
+import time
+os.environ['TZ'] = 'Asia/Tokyo'
+if hasattr(time, 'tzset'):
+    time.tzset()
+    
 # --- ページ設定 ---
 st.set_page_config(page_title="limit my life", layout="centered")
 
@@ -170,4 +176,5 @@ with tab2:
 with tab3:
     st.subheader("全データ表示")
     if os.path.isfile(DB_FILE):
+
         st.dataframe(pd.read_csv(DB_FILE, encoding='utf-8-sig'), use_container_width=True)
