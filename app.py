@@ -138,8 +138,8 @@ with tab1:
                 else:
                     st.info(response.text)
 
-            try:
-                # tryより「半角スペース4つ分」右にずらす
+           try:
+                # new_data_dict は try よりもさらに右に！
                 new_data_dict = {
                     "date": str(today), 
                     "axes": ", ".join(selected_axes), 
@@ -155,7 +155,7 @@ with tab1:
                 conn.update(worksheet="Sheet1", data=df_updated)
                 st.success("スプレッドシートに日記を刻みました！")
             except Exception as e:
-                # exceptはtryと同じ位置。中身のst.errorは右にずらす
+                # except は try と縦のラインをピタリと揃える
                 st.error(f"スプレッドシートへの保存に失敗しました: {e}")
 
 # --- tab2, tab3 は以前のものを維持 ---
@@ -210,6 +210,7 @@ with tab3:
     if os.path.isfile(DB_FILE):
 
         st.dataframe(pd.read_csv(DB_FILE, encoding='utf-8-sig'), use_container_width=True)
+
 
 
 
