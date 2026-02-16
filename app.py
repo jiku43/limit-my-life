@@ -74,7 +74,7 @@ with tab1:
     st.markdown(f"### {today.year}年 {today.month}月 {today.day}日")
     
     
-    progress_dots = int((now.hour / 24) * 12)
+    progress_dots = int(((now.hour + now.minute / 60) / 24) * 12)
     dots_display = " ".join(["●" if i < progress_dots else "○" for i in range(12)])
     st.markdown(f"## {dots_display}")
 
@@ -180,5 +180,6 @@ with tab3:
     if os.path.isfile(DB_FILE):
 
         st.dataframe(pd.read_csv(DB_FILE, encoding='utf-8-sig'), use_container_width=True)
+
 
 
