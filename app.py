@@ -80,7 +80,7 @@ with tab1:
 
     # すべて左端が綺麗に揃っている必要があります
     spacer = "&nbsp;" * 16
-    st.markdown(f"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🌅{spacer}☀️{spacer}🌆{spacer}🌙", unsafe_allow_html=True)
+    st.markdown(f"{spacer}🌅{spacer}☀️{spacer}🌆{spacer}🌙", unsafe_allow_html=True)
     st.divider()
     monthly_goal = st.text_input("今月の目標", placeholder="この一ヶ月で到達したい姿を書いてください")
     
@@ -180,6 +180,7 @@ with tab3:
     if os.path.isfile(DB_FILE):
 
         st.dataframe(pd.read_csv(DB_FILE, encoding='utf-8-sig'), use_container_width=True)
+
 
 
 
