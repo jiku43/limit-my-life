@@ -1,3 +1,4 @@
+from streamlit_gsheets import GSheetsConnection
 import streamlit as st
 import datetime
 import google.generativeai as genai
@@ -18,7 +19,7 @@ today = now.date()
 st.set_page_config(page_title="limit my life", layout="centered")
 
 # --- 保存用ファイルの準備 ---
-DB_FILE = "life_log.csv"
+conn = st.connection("gsheets", type=GSheetsConnection)
 
 # --- 1. システム設定（サイドバー） ---
 st.sidebar.title("System Settings")
@@ -137,17 +138,25 @@ with tab1:
                 else:
                     st.info(response.text)
 
-                # 保存
-                new_data = {
-                    "date": [today], 
-                    "axes": [", ".join(selected_axes)], 
-                    "goal": [monthly_goal], 
-                    "reflection": [reflection_text], 
-                    "advice": [response.text],
-                    "bad_habits": [", ".join(done_bad_habits)]
-                }
-                pd.DataFrame(new_data).to_csv(DB_FILE, mode='a', header=not os.path.isfile(DB_FILE), index=False, encoding='utf-8-sig')
-                st.success("日記を保存しました。")
+               # 新しい保存コード
+        new_data_dict = {
+            "date": str(today), 
+            "axes": ", ".join(selected_axes), 
+            "goal": monthly_goal, 
+            "reflection": reflection_text, 
+            "advice": response.text,
+            "bad_habits": ", ".join(done_bad_habits)
+        }
+        
+        try:
+            # 既存のデータを読み込み、新しい行を足して更新する
+            df_current = conn.read(worksheet="Sheet1")
+            new_row = pd.DataFrame([new_data_dict])
+            df_updated = pd.concat([df_current, new_row], ignore_index=True)
+            conn.update(worksheet="Sheet1", data=df_updated)
+            st.success("スプレッドシートに日記を刻みました！")
+        except Exception as e:
+            st.error(f"スプレッドシートへの保存に失敗しました: {e}")
             except Exception as e:
                 st.error(f"エラーが発生しました: {e}")
 
@@ -203,6 +212,7 @@ with tab3:
     if os.path.isfile(DB_FILE):
 
         st.dataframe(pd.read_csv(DB_FILE, encoding='utf-8-sig'), use_container_width=True)
+
 
 
 
