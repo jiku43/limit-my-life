@@ -6,12 +6,14 @@ import os
 import random
 from PIL import Image
 
-# --- 日本時間への修正（ここを追加） ---
-import time
-os.environ['TZ'] = 'Asia/Tokyo'
-if hasattr(time, 'tzset'):
-    time.tzset()
-    
+# タイムゾーン指定のために追加
+from datetime import timedelta, timezone
+
+# --- 日本時間(JST)を計算で取得 ---
+JST = timezone(timedelta(hours=+9), 'JST')
+now = datetime.datetime.now(JST)
+today = now.date()
+
 # --- ページ設定 ---
 st.set_page_config(page_title="limit my life", layout="centered")
 
@@ -68,10 +70,10 @@ st.title(f"limit my life : {limit_age}")
 tab1, tab2, tab3 = st.tabs(["今日の内省", "振り返りカレンダー", "全データ"])
 
 with tab1:
-    today = datetime.date.today()
+    
     st.markdown(f"### {today.year}年 {today.month}月 {today.day}日")
     
-    now = datetime.datetime.now()
+    
     progress_dots = int((now.hour / 24) * 12)
     dots_display = " ".join(["●" if i < progress_dots else "○" for i in range(12)])
     st.markdown(f"## {dots_display}")
@@ -178,3 +180,4 @@ with tab3:
     if os.path.isfile(DB_FILE):
 
         st.dataframe(pd.read_csv(DB_FILE, encoding='utf-8-sig'), use_container_width=True)
+
