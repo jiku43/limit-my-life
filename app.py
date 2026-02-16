@@ -122,10 +122,10 @@ with tab1:
                     full_prompt = base_prompt + "\n重要：ユーザーは悪い習慣を2つ以上行いました。前半は伴走者として厳しく叱責し、後半は『悪魔』が登場して甘く誘惑する二段構えで答えて。写真がある場合はその情景も交えて。"
                 elif img:
                     # 写真がある通常の対話：画像解析を優先
-                    full_prompt = base_prompt + "\n写真の「色・光・空気感」のどれか1つを拾い、日記の内容と結びつけて1〜2文で答えて。"
+                    full_prompt = base_prompt + "\n写真の「色・光・空気感」のどれか1つを拾い、日記の内容と結びつけて1〜2文で勇気づけ気味に答えて。"
                 else:
                     # 写真がない通常の対話：テキストの深化に集中
-                    full_prompt = base_prompt + "\n日記の内容から心の動きを読み取り、今の視点を踏まえて、1〜2文で心に深く届く対話をして。"
+                    full_prompt = base_prompt + "\n日記の内容から心の動きを読み取り、今の視点を踏まえて、1〜2文で心に届く前向きな対話をして。"
 
                 # 送信データの構築（ここが判別の肝）
                 content = [full_prompt, img] if img else [full_prompt]
@@ -158,30 +158,43 @@ with tab2:
         df_log = pd.read_csv(DB_FILE, encoding='utf-8-sig')
         df_log['date'] = pd.to_datetime(df_log['date']).dt.date
         import calendar
-        cal_date = today # 冒頭で定義した日本時間を使用
+        cal_date = today
         yy, mm = cal_date.year, cal_date.month
         st.write(f"### {yy}年 {mm}月")
         
         month_days = calendar.monthcalendar(yy, mm)
         written_days = set(df_log['date'].values)
-        
-        # 曜日ラベルを横に並べる
-        week_labels = ["月", "火", "水", "木", "金", "土", "日"]
-        cols = st.columns(7)
-        for i, label in enumerate(week_labels):
-            cols[i].caption(label)
-        
-        # 日付を横並び(7列)に固定する
+
+        # --- ここからHTML/CSSでカレンダーを作成 ---
+        html_cal = """
+        <style>
+            .calendar-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+            .calendar-table th, .calendar-table td { 
+                text-align: center; padding: 5px 0; border: 1px solid #ddd; font-size: 14px; 
+            }
+            .calendar-table th { background-color: #f0f2f6; color: #333; }
+            .check-mark { color: #2ecc71; font-weight: bold; font-size: 12px; display: block; }
+            .today-cell { background-color: #e0f7fa; }
+        </style>
+        <table class="calendar-table">
+            <tr><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th style="color:blue;">土</th><th style="color:red;">日</th></tr>
+        """
+
         for week in month_days:
-            # gap="small" を指定し、スマホでも折り返さないようにする
-            cols = st.columns(7) 
+            html_cal += "<tr>"
             for i, day in enumerate(week):
-                if day != 0:
+                if day == 0:
+                    html_cal += "<td></td>"
+                else:
                     date_obj = datetime.date(yy, mm, day)
-                    if date_obj in written_days:
-                        cols[i].markdown(f"**{day}**\n✅")
-                    else:
-                        cols[i].write(day)
+                    is_today = "today-cell" if date_obj == today else ""
+                    checked = "<span class='check-mark'>✅</span>" if date_obj in written_days else ""
+                    html_cal += f"<td class='{is_today}'>{day}{checked}</td>"
+            html_cal += "</tr>"
+        
+        html_cal += "</table>"
+        st.markdown(html_cal, unsafe_allow_html=True)
+        # --- ここまで ---
     else:
         st.info("データがありません。")
 
@@ -190,6 +203,7 @@ with tab3:
     if os.path.isfile(DB_FILE):
 
         st.dataframe(pd.read_csv(DB_FILE, encoding='utf-8-sig'), use_container_width=True)
+
 
 
 
