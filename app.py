@@ -158,13 +158,23 @@ with tab2:
         df_log = pd.read_csv(DB_FILE, encoding='utf-8-sig')
         df_log['date'] = pd.to_datetime(df_log['date']).dt.date
         import calendar
-        cal_date = datetime.date.today()
+        cal_date = today # 冒頭で定義した日本時間を使用
         yy, mm = cal_date.year, cal_date.month
         st.write(f"### {yy}年 {mm}月")
+        
         month_days = calendar.monthcalendar(yy, mm)
         written_days = set(df_log['date'].values)
+        
+        # 曜日ラベルを横に並べる
+        week_labels = ["月", "火", "水", "木", "金", "土", "日"]
+        cols = st.columns(7)
+        for i, label in enumerate(week_labels):
+            cols[i].caption(label)
+        
+        # 日付を横並び(7列)に固定する
         for week in month_days:
-            cols = st.columns(7)
+            # gap="small" を指定し、スマホでも折り返さないようにする
+            cols = st.columns(7) 
             for i, day in enumerate(week):
                 if day != 0:
                     date_obj = datetime.date(yy, mm, day)
@@ -180,6 +190,7 @@ with tab3:
     if os.path.isfile(DB_FILE):
 
         st.dataframe(pd.read_csv(DB_FILE, encoding='utf-8-sig'), use_container_width=True)
+
 
 
 
