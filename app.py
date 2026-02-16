@@ -78,9 +78,9 @@ with tab1:
     dots_display = " ".join(["●" if i < progress_dots else "○" for i in range(12)])
     st.markdown(f"## {dots_display}")
 
-    spacer = "&nbsp;" * 20 
-    st.markdown(f"&nbsp;🌙{spacer}🌅{spacer}☀️{spacer}🌆", unsafe_allow_html=True)
-    st.divider()
+    # --- 修正後の配置（全体を左に寄せ、三日月を最後に） ---
+spacer = "&nbsp;" * 16  # スペースの間隔を少し詰めて左に寄せます
+st.markdown(f"&nbsp;🌅{spacer}☀️{spacer}🌆{spacer}🌙", unsafe_allow_html=True)
 
     monthly_goal = st.text_input("今月の目標", placeholder="この一ヶ月で到達したい姿を書いてください")
     
@@ -180,6 +180,7 @@ with tab3:
     if os.path.isfile(DB_FILE):
 
         st.dataframe(pd.read_csv(DB_FILE, encoding='utf-8-sig'), use_container_width=True)
+
 
 
 
