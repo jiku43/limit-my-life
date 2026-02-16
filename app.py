@@ -164,55 +164,48 @@ with tab1:
 # --- tab2, tab3 は以前のものを維持 ---
 with tab2:
     st.subheader("内省カレンダー")
-    if os.path.isfile(DB_FILE):
-        df_log = pd.read_csv(DB_FILE, encoding='utf-8-sig')
-        df_log['date'] = pd.to_datetime(df_log['date']).dt.date
-        import calendar
-        cal_date = today
-        yy, mm = cal_date.year, cal_date.month
-        st.write(f"### {yy}年 {mm}月")
+    try:
+        # スプレッドシートから最新データを読み込む
+        df_log = conn.read(worksheet="Sheet1")
         
-        month_days = calendar.monthcalendar(yy, mm)
-        written_days = set(df_log['date'].values)
+        if not df_log.empty:
+            # 日付列を日付型に変換
+            df_log['date'] = pd.to_datetime(df_log['date']).dt.date
+            import calendar
+            cal_date = today
+            yy, mm = cal_date.year, cal_date.month
+            st.write(f"### {yy}年 {mm}月")
+            
+            month_days = calendar.monthcalendar(yy, mm)
+            written_days = set(df_log['date'].values)
 
-        # --- ここからHTML/CSSでカレンダーを作成 ---
-        html_cal = """
-        <style>
-            .calendar-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-            .calendar-table th, .calendar-table td { 
-                text-align: center; padding: 5px 0; border: 1px solid #ddd; font-size: 14px; 
-            }
-            .calendar-table th { background-color: #f0f2f6; color: #333; }
-            .check-mark { color: #2ecc71; font-weight: bold; font-size: 12px; display: block; }
-            .today-cell { background-color: #e0f7fa; }
-        </style>
-        <table class="calendar-table">
-            <tr><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th style="color:blue;">土</th><th style="color:red;">日</th></tr>
-        """
-
-        for week in month_days:
-            html_cal += "<tr>"
-            for i, day in enumerate(week):
-                if day == 0:
-                    html_cal += "<td></td>"
-                else:
-                    date_obj = datetime.date(yy, mm, day)
-                    is_today = "today-cell" if date_obj == today else ""
-                    checked = "<span class='check-mark'>✅</span>" if date_obj in written_days else ""
-                    html_cal += f"<td class='{is_today}'>{day}{checked}</td>"
-            html_cal += "</tr>"
-        
-        html_cal += "</table>"
-        st.markdown(html_cal, unsafe_allow_html=True)
-        # --- ここまで ---
-    else:
-        st.info("データがありません。")
+            # 横並びカレンダーの表示
+            html_cal = "<style>.cal-table { width: 100%; border-collapse: collapse; table-layout: fixed; } .cal-table th, .cal-table td { text-align: center; padding: 5px 0; border: 1px solid #ddd; font-size: 14px; } .check { color: #2ecc71; font-weight: bold; } .today { background-color: #e0f7fa; }</style><table class='cal-table'><tr><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th style='color:blue;'>土</th><th style='color:red;'>日</th></tr>"
+            for week in month_days:
+                html_cal += "<tr>"
+                for i, day in enumerate(week):
+                    if day == 0:
+                        html_cal += "<td></td>"
+                    else:
+                        date_obj = datetime.date(yy, mm, day)
+                        is_today = "today" if date_obj == today else ""
+                        checked = "<span class='check'>✅</span>" if date_obj in written_days else ""
+                        html_cal += f"<td class='{is_today}'>{day}{checked}</td>"
+                html_cal += "</tr>"
+            st.markdown(html_cal + "</table>", unsafe_allow_html=True)
+        else:
+            st.info("データがまだありません。最初の日記を刻んでみましょう！")
+    except Exception as e:
+        st.error(f"データの読み込みに失敗しました。Secretsの設定を確認してください。")
 
 with tab3:
     st.subheader("全データ表示")
-    if os.path.isfile(DB_FILE):
+    try:
+        df_all = conn.read(worksheet="Sheet1")
+        st.dataframe(df_all, use_container_width=True)
+    except:
+        st.info("データが読み込めません。")
 
-        st.dataframe(pd.read_csv(DB_FILE, encoding='utf-8-sig'), use_container_width=True)
 
 
 
