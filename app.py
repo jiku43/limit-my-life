@@ -155,8 +155,8 @@ with tab1:
                     conn.create(worksheet="Sheet1", data=pd.DataFrame([new_data_dict]))
                     
                     st.success("スプレッドシートに日記を刻みました！")
-            except Exception as e:
-                st.error(f"エラーが発生しました: {e}")
+                except Exception as e:
+                    st.error(f"エラーが発生しました: {e}")
 with tab2:
     st.subheader("内省カレンダー")
     try:
@@ -200,6 +200,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
