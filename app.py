@@ -145,8 +145,11 @@ with tab1:
                     "image_analysis": "あり" if img else "なし"
                 }
                 
-                # スプレッドシートへ1行追記
-                conn.create(worksheet="Sheet1", data=pd.DataFrame([new_data_dict]))
+                # 既存のデータを読み込み、新しい行を足して更新する
+                df_current = conn.read(worksheet="Sheet1")
+                new_row = pd.DataFrame([new_data_dict])
+                df_updated = pd.concat([df_current, new_row], ignore_index=True)
+                conn.update(worksheet="Sheet1", data=df_updated)
                 st.success("スプレッドシートに日記を刻みました！")
             except Exception as e:
                 st.error(f"エラーが発生しました: {e}")
@@ -193,6 +196,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
