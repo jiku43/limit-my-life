@@ -157,7 +157,7 @@ with tab1:
                     st.success("スプレッドシートに日記を刻みました！")
                 except Exception as e:
                 # すべての失敗（保存やAI対話）をここでキャッチします
-                st.error(f"エラーが発生しました（電波状況やAPI制限を確認してください）: {e}")
+                    st.error(f"エラーが発生しました（電波状況やAPI制限を確認してください）: {e}")
 
 # --- tab2, tab3 は以前のものを維持 ---
 with tab2:
@@ -203,6 +203,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
