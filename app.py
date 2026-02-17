@@ -159,7 +159,7 @@ with tab1:
                     st.error(f"保存に失敗しました。電波の良い場所で再試行してください: {e}")
 
                 except Exception as e:
-                st.error(f"AIとの対話中にエラーが発生しました: {e}")
+                    st.error(f"AIとの対話中にエラーが発生しました: {e}")
 
 # --- tab2, tab3 は以前のものを維持 ---
 with tab2:
@@ -205,6 +205,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
