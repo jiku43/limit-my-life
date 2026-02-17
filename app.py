@@ -83,16 +83,16 @@ with tab1:
     spacer = "&nbsp;" * 16
     st.markdown(f"{spacer}🌅{spacer}☀️{spacer}🌆{spacer}🌙", unsafe_allow_html=True)
     st.divider()
-   # --- 既存の目標をスプレッドシートから取得 ---
-last_goal = ""
-try:
-    # 157行目付近で読み込んでいる df_log をここでも活用します
-    temp_df = conn.read(worksheet="Sheet1")
-    if not temp_df.empty and 'goal' in temp_df.columns:
-        # 一番新しい行の目標を取得
-        val = temp_df.iloc[-1]['goal']
-        if pd.notna(val):
-            last_goal = val
+    # --- 既存の目標をスプレッドシートから取得 ---
+    last_goal = ""
+    try:
+    　　# 157行目付近で読み込んでいる df_log をここでも活用します
+    　　temp_df = conn.read(worksheet="Sheet1")
+    　　if not temp_df.empty and 'goal' in temp_df.columns:
+        　　# 一番新しい行の目標を取得
+        　　val = temp_df.iloc[-1]['goal']
+        　　if pd.notna(val):
+            　　last_goal = val
 except Exception:
     pass
 
@@ -210,6 +210,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
