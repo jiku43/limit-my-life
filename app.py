@@ -57,7 +57,7 @@ jiku_30 = ["健康", "挑戦", "勇気", "誠実", "自律", "貢献", "美意�
 selected_axes = st.sidebar.multiselect("今月の3軸", jiku_30, default=["健康", "挑戦", "感謝"], max_selections=3)
 
 st.sidebar.subheader("🚫 本日の「やってしまったこと」")
-not_to_do_list = ["無駄なSNS", "夜更かし", "過度な飲酒", "サボり", "後回し", "感情的な反応", "色欲", "言い訳", "嘘をつく", "批判", "二度寝"]
+not_to_do_list = ["無駄なSNS", "夜更かし", "過度な飲酒", "サボり", "二度寝", "感情的な反応", "色欲", "言い訳", "嘘をつく", "批判"]
 done_bad_habits = []
 for habit in not_to_do_list:
     if st.sidebar.checkbox(habit, key=habit):
@@ -199,6 +199,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
