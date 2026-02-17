@@ -83,7 +83,14 @@ with tab1:
     spacer = "&nbsp;" * 16
     st.markdown(f"{spacer}🌅{spacer}☀️{spacer}🌆{spacer}🌙", unsafe_allow_html=True)
     st.divider()
-    monthly_goal = st.text_input("今月の目標", placeholder="この一ヶ月で到達したい姿を書いてください")
+   # 86行目にこちらを貼り付け
+try:
+    temp_df = conn.read(worksheet="Sheet1")
+    last_goal = temp_df.iloc[-1]['goal'] if not temp_df.empty else ""
+except:
+    last_goal = ""
+
+monthly_goal = st.sidebar.text_input("今月の目標", value=last_goal)
     
     if "prompt" not in st.session_state:
         st.session_state.prompt = "今の正直な気持ちを、自分の軸に照らして言葉にしてみよう"
@@ -196,6 +203,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
