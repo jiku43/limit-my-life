@@ -102,7 +102,7 @@ with tab1:
             st.warning("内省内容を入力してください。")
         else:
             try:
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                model = genai.GenerativeModel('gemini-3-flash-preview')
                 is_devil_mode = len(done_bad_habits) >= 2
                 
                 persona_prompts = {
@@ -190,6 +190,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
