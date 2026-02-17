@@ -141,7 +141,7 @@ with tab1:
                     "goal": monthly_goal, 
                     "reflection": reflection_text, 
                     "advice": response.text,
-                    "bad_habits": ", ".join(done_bad_habits)
+                    "bad_habits": ", ".join(done_bad_habits),
                     new_data_dict = {
                     "date": str(today), 
                     "axes": ", ".join(selected_axes), 
@@ -199,6 +199,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
