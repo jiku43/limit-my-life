@@ -155,11 +155,9 @@ with tab1:
                     conn.create(worksheet="Sheet1", data=pd.DataFrame([new_data_dict]))
                     
                     st.success("スプレッドシートに日記を刻みました！")
-                except Exception as e:
-                # すべての失敗（保存やAI対話）をここでキャッチします
-                    st.error(f"エラーが発生しました（電波状況やAPI制限を確認してください）: {e}")
-
-# --- tab2, tab3 は以前のものを維持 ---
+               except Exception as e:
+                # この行の左端は try と縦のラインを合わせる
+                st.error(f"エラーが発生しました: {e}")
 with tab2:
     st.subheader("内省カレンダー")
     try:
@@ -203,6 +201,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
