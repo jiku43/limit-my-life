@@ -135,21 +135,15 @@ with tab1:
                     st.info(response.text)
 
                 # --- 爆速保存処理 ---
+                # 保存するデータの構築（1つだけに絞ります）
                 new_data_dict = {
                     "date": str(today), 
                     "axes": ", ".join(selected_axes), 
                     "goal": monthly_goal, 
                     "reflection": reflection_text, 
                     "advice": response.text,
-                    "bad_habits": ", ".join(done_bad_habits)
-                    new_data_dict = {
-                    "date": str(today), 
-                    "axes": ", ".join(selected_axes), 
-                    "goal": monthly_goal, 
-                    "reflection": reflection_text, 
-                    "advice": response.text,
                     "bad_habits": ", ".join(done_bad_habits),
-                    "image_analysis": "あり" if img else "なし"  
+                    "image_analysis": "あり" if img else "なし"
                 }
                 }
                 conn.create(worksheet="Sheet1", data=pd.DataFrame([new_data_dict]))
@@ -199,6 +193,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
