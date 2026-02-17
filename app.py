@@ -134,7 +134,6 @@ with tab1:
                 else:
                     st.info(response.text)
 
-                try:
                 # 保存するデータの構築（1つだけに整理！）
                 new_data_dict = {
                     "date": str(today), 
@@ -194,6 +193,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
