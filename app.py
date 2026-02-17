@@ -134,8 +134,8 @@ with tab1:
                 else:
                     st.info(response.text)
 
-                # --- 爆速保存処理 ---
-                # 保存するデータの構築（1つだけに絞ります）
+                try:
+                # 保存するデータの構築（1つだけに整理！）
                 new_data_dict = {
                     "date": str(today), 
                     "axes": ", ".join(selected_axes), 
@@ -145,7 +145,8 @@ with tab1:
                     "bad_habits": ", ".join(done_bad_habits),
                     "image_analysis": "あり" if img else "なし"
                 }
-                }
+                
+                # スプレッドシートへ1行追記
                 conn.create(worksheet="Sheet1", data=pd.DataFrame([new_data_dict]))
                 st.success("スプレッドシートに日記を刻みました！")
             except Exception as e:
@@ -193,6 +194,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
