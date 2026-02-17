@@ -92,8 +92,6 @@ with tab1:
     except:
         pass
     
-    monthly_goal = st.text_input("今月の目標", value=last_goal)
-# サイドバーではなく、メイン画面の86行目にある入力欄を書き換え
     monthly_goal = st.text_input("今月の目標", value=last_goal, placeholder="この一ヶ月で到達したい姿を書いてください")
     
     if "prompt" not in st.session_state:
@@ -207,6 +205,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
