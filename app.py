@@ -139,24 +139,24 @@ with tab1:
                     st.info(response.text)
 
                 # --- 修正の肝：ここから try ブロックを開始する ---
-             try:
+                try:
                 # 1. 保存するデータを辞書形式で用意
-                new_data_dict = {
-                    "date": str(today), 
-                    "axes": ", ".join(selected_axes), 
-                    "goal": monthly_goal, 
-                    "reflection": reflection_text, 
-                    "advice": response.text,
-                    "bad_habits": ", ".join(done_bad_habits)
-                }
-                
-                # 2. 【改善】全体を読み込まず、1行だけ直接追記する
-                # これにより通信量が激減し、3分かかっていた処理が数秒になります
-                conn.create(worksheet="Sheet1", data=pd.DataFrame([new_data_dict]))
-                
-                st.success("スプレッドシートに日記を刻みました！")
+                    new_data_dict = {
+                        "date": str(today), 
+                        "axes": ", ".join(selected_axes), 
+                        "goal": monthly_goal, 
+                        "reflection": reflection_text, 
+                        "advice": response.text,
+                        "bad_habits": ", ".join(done_bad_habits)
+                    }
+                    
+                    # 2. 【改善】全体を読み込まず、1行だけ直接追記する
+                    # これにより通信量が激減し、3分かかっていた処理が数秒になります
+                    conn.create(worksheet="Sheet1", data=pd.DataFrame([new_data_dict]))
+                    
+                    st.success("スプレッドシートに日記を刻みました！")
                 except Exception as e:
-                st.error(f"保存に失敗しました。電波の良い場所で再試行してください: {e}")
+                    st.error(f"保存に失敗しました。電波の良い場所で再試行してください: {e}")
 
              except Exception as e:
                 st.error(f"AIとの対話中にエラーが発生しました: {e}")
@@ -205,6 +205,7 @@ with tab3:
         st.dataframe(df_all, use_container_width=True)
     except:
         st.info("データが読み込めません。")
+
 
 
 
