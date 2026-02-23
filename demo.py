@@ -94,7 +94,7 @@ with tab1:
             st.warning("内省内容を入力してください。")
         else:
             try:
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                model = genai.GenerativeModel('gemini-3-flash-preview')
                 is_devil_mode = len(done_bad_habits) >= 2
                 
                 persona_prompts = {
